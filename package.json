@@ -1,0 +1,64 @@
+{
+  "name": "lisk-newrelic",
+  "version": "0.1.0",
+  "description": "Newrelic wrapper for Liks Core",
+  "author": "Lisk Foundation <admin@lisk.io>, lightcurve GmbH <admin@lightcurve.io>",
+  "license": "GPL-3.0",
+  "keywords": [
+    "lisk",
+    "blockchain",
+    "apm"
+  ],
+  "homepage": "https://github.com/LiskHQ/lisk-newrelic#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LiskHQ/lisk-newrelic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LiskHQ/lisk-newrelic/issues"
+  },
+  "engines": {
+    "node": "8.11.4",
+    "npm": "5.6.0"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "check:dependencies": "snyk protect",
+    "test": "NODE_ENV=test nyc mocha",
+    "test:watch": "npm test -- --watch",
+    "test:watch:min": "npm run test:watch -- --reporter=min",
+    "cover": "if [ -z $JENKINS_HOME ]; then npm run cover:local; else npm run cover:ci; fi",
+    "cover:base": "NODE_ENV=test nyc report",
+    "cover:local": "npm run cover:base -- --reporter=html --reporter=text",
+    "cover:ci": "npm run cover:base -- --reporter=text-lcov | coveralls -v",
+    "precommit": "lint-staged",
+    "prepush": "npm run lint && npm test && npm run check:dependencies",
+    "prepublishOnly": "rm -r ./node_modules && npm install && npm run prepush && npm run build",
+    "postinstall": "npm run check:dependencies"
+  },
+  "dependencies": {
+    "newrelic": "=4.8.1"
+  },
+  "devDependencies": {
+    "chai": "4.1.2",
+    "chai-as-promised": "7.1.1",
+    "coveralls": "3.0.0",
+    "eslint": "4.16.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-config-lisk-base": "1.0.0",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-mocha": "4.11.0",
+    "husky": "0.14.3",
+    "lint-staged": "5.0.0",
+    "mocha": "4.0.1",
+    "mocha-bdd": "0.1.2",
+    "nyc": "11.3.0",
+    "prettier": "1.8.2",
+    "sinon": "4.1.2",
+    "sinon-chai": "2.14.0",
+    "snyk": "1.73.0"
+  }
+}
