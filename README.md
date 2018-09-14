@@ -69,8 +69,6 @@ sensible value but may need to be updated depending on the project.
 
 Installed for your convenience are the following:
 
-1. [Babel][babel] plus various plugins, presets and tools so you can write
-	modern JavaScript without worrying about compatibility.
 1. [Prettier][prettier] for standard code formatting.
 1. [ESLint][eslint] plus various configs and plugins, to enforce additional
 	rules beyond Prettier’s remit.
@@ -83,8 +81,6 @@ These can be removed as appropriate, along with the corresponding NPM scripts.
 
 ### Scripts
 
-* `start` will run your source code using `babel-node`, which is not performant
-	but does not require transpilation.
 * `format` will format your source and test code using Prettier.
 * `lint` will lint everything relevant with ESLint.
 * `test` will run your tests and instrument your code using nyc. (With the
@@ -94,7 +90,6 @@ These can be removed as appropriate, along with the corresponding NPM scripts.
 * `test:watch:min` will do the same but using the `min` reporter (useful if you
 	just want to check if your changes break a test).
 * `cover` will output a coverage report (differs based on the environment).
-* `build` will transpile your source code using Babel.
 * `precommit` will format staged files and lint everything before you commit.
 * `prepush` will lint and test before you push.
 * `prepublishOnly` will run the `prepush` checks and the `build` command.
