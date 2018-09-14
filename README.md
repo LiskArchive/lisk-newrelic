@@ -69,8 +69,6 @@ sensible value but may need to be updated depending on the project.
 
 Installed for your convenience are the following:
 
-1. [Babel][babel] plus various plugins, presets and tools so you can write
-	modern JavaScript without worrying about compatibility.
 1. [Prettier][prettier] for standard code formatting.
 1. [ESLint][eslint] plus various configs and plugins, to enforce additional
 	rules beyond Prettier’s remit.
