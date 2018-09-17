@@ -40,7 +40,7 @@
     "postinstall": "npm run check:dependencies"
   },
   "dependencies": {
-    "newrelic": "=4.8.1"
+    "debug": "4.0.1"
   },
   "devDependencies": {
     "chai": "4.1.2",
@@ -55,6 +55,7 @@
     "lint-staged": "5.0.0",
     "mocha": "4.0.1",
     "mocha-bdd": "0.1.2",
+    "newrelic": "4.8.1",
     "nyc": "11.3.0",
     "prettier": "1.8.2",
     "sinon": "4.1.2",
