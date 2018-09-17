@@ -26,7 +26,7 @@
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "check:dependencies": "snyk protect",
+    "check:dependencies": "snyk test",
     "test": "NODE_ENV=test nyc mocha",
     "test:watch": "npm test -- --watch",
     "test:watch:min": "npm run test:watch -- --reporter=min",
