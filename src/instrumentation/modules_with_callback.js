@@ -24,7 +24,13 @@ const debug = require('debug')('newrelic:lisk:modules_with_callback');
  * @param module
  * @param moduleName
  */
-module.exports = function initialize(identifier, functions, shim, module, moduleName) {
+module.exports = function initialize(
+	identifier,
+	functions,
+	shim,
+	module,
+	moduleName,
+) {
 	debug('init %s', moduleName);
 
 	let methods = null;
@@ -34,37 +40,38 @@ module.exports = function initialize(identifier, functions, shim, module, module
 	} else if (Array.isArray(functions)) {
 		methods = functions;
 	}
+	debug('methods to wrap %j', identifier, methods);
 
 	methods.forEach(method => {
 		let object;
 		let methodToWrap = method.split('.');
 
 		if (methodToWrap.length > 2) {
-			throw new Error('callBackMethods array only support one level of nesting');
+			throw new Error(
+				'callBackMethods array only support one level of nesting',
+			);
 		}
+
+		Object.hasOwnProperty.call(module, methodToWrap[0])
+			? (object = module)
+			: (object = module.prototype);
 
 		if (methodToWrap.length === 2) {
-			object = module.prototype[methodToWrap[0]];
-			[methodToWrap] = methodToWrap;
+			object = object[methodToWrap[0]];
+			[, methodToWrap] = methodToWrap;
 		} else {
-			object = module;
-			methodToWrap = method;
+			[methodToWrap] = methodToWrap;
 		}
 
-		shim.wrap(
-			object,
-			[methodToWrap],
-			(functionShim, fn, fnName) => {
-				function wrapper(...args) {
-					const argsArray = shim.argsToArray(...args);
-					const segment = functionShim.createSegment(`${identifier}.${method}`);
-					shim.bindCallbackSegment(argsArray, functionShim.LAST, segment);
-					fn.apply(this, argsArray);
-				}
+		debug('object %s ', identifier, object);
 
-				Object.defineProperty(wrapper, 'name', { value: `${fnName}Wrapper`, configurable: true });
-				return wrapper;
-			},
-		);
+		shim.wrap(object, [methodToWrap], (functionShim, fn, fnName) => {
+			debug('creating wrapper for %s : %s', identifier, fnName);
+			return shim.agent.tracer.wrapFunctionLast(
+				`${identifier}.${method}`,
+				null,
+				fn,
+			);
+		});
 	});
 };

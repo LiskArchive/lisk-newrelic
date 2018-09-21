@@ -93,9 +93,9 @@ class LiskNewRelic {
 	}
 
 	instrumentBackgroundJobs() {
-		this.newrelic.instrument({
+		this.newrelic.instrumentMessages({
 			moduleName: '../helpers/jobs_queue.js',
-			onRequire: jobQueueInstrument.bind(this.newrelic),
+			onRequire: jobQueueInstrument,
 			onError: this.errorHandler,
 		});
 	}
@@ -119,7 +119,8 @@ class LiskNewRelic {
 
 		this.newrelic.instrument({
 			moduleName: modulePath,
-			onRequire: modulesWithCallbackInstrument.bind(this,
+			onRequire: modulesWithCallbackInstrument.bind(
+				this,
 				moduleIdentifier,
 				callbackFunctions,
 			),

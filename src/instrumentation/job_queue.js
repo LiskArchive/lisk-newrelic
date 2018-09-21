@@ -19,10 +19,13 @@ const debug = require('debug')('newrelic:lisk:job_queue');
 module.exports = function initialize(shim, jobQueue, moduleName) {
 	debug('init %s', moduleName);
 
-	const newrelic = this;
-
-	// eslint-disable-next-line no-shadow
-	shim.wrap(jobQueue, ['register'], (shim, originalRegister, fnName) => {
+	// eslint-disable-next-line prefer-arrow-callback
+	shim.wrap(jobQueue, ['register'], function jobRegisterWrapper(
+		// eslint-disable-next-line no-shadow
+		shim,
+		originalRegister,
+		fnName,
+	) {
 		debug('wrapping %s', fnName);
 
 		if (shim.isWrapped(originalRegister)) {
@@ -31,16 +34,29 @@ module.exports = function initialize(shim, jobQueue, moduleName) {
 
 		return function wrappedRegister(name, originalJob, time) {
 			function wrappedJob(cb) {
-				newrelic.startBackgroundTransaction(name, 'jobQueue', () => {
-					const transaction = newrelic.getTransaction();
-					originalJob.call(this, () => {
-						transaction.end();
-						cb.call(this);
-					});
-				});
+				const segment = shim.createSegment(name);
+				const transaction = shim.agent.getTransaction();
+				shim.applySegment(
+					originalJob,
+					segment,
+					true,
+					this,
+					[
+						() => {
+							segment.end();
+							transaction.end();
+							cb.call(this);
+						},
+					],
+					() => {
+						shim.setTransactionName(`jobQueue/${name}`);
+					},
+				);
 			}
-
-			originalRegister.call(this, name, wrappedJob, time);
+			const wrappedTransactionJob = shim.bindCreateTransaction(wrappedJob, {
+				type: shim.BG,
+			});
+			originalRegister.call(this, name, wrappedTransactionJob, time);
 		};
 	});
 };
