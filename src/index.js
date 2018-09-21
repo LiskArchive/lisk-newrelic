@@ -95,7 +95,7 @@ class LiskNewRelic {
 	instrumentBackgroundJobs() {
 		this.newrelic.instrumentMessages({
 			moduleName: '../helpers/jobs_queue.js',
-			onRequire: jobQueueInstrument,
+			onRequire: jobQueueInstrument.bind(this.newrelic),
 			onError: this.errorHandler,
 		});
 	}
