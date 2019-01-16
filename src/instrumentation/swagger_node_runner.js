@@ -57,7 +57,10 @@ module.exports = function initialize(shim, swaggerNodeRunner, moduleName) {
 							},
 						};
 					}
-					Object.defineProperty(wrapper, 'name', { value: `${fnName}Wrapper`, configurable: true });
+					Object.defineProperty(wrapper, 'name', {
+						value: `${fnName}Wrapper`,
+						configurable: true,
+					});
 					return wrapper;
 				},
 			});

@@ -68,7 +68,9 @@ class LiskNewRelic {
 
 		const controllerFolder = '/api/controllers/';
 		const controllerMethodExtractor = (shim, controller) =>
+			// eslint-disable-next-line implicit-arrow-linebreak
 			Object.getOwnPropertyNames(controller).filter(name =>
+				// eslint-disable-next-line implicit-arrow-linebreak
 				shim.isFunction(controller[name]),
 			);
 
@@ -112,6 +114,7 @@ class LiskNewRelic {
 		assert(modulePath, 'Must specify module path.');
 		assert(moduleIdentifier, 'Must specify module identifier.');
 		assert(
+			// eslint-disable-next-line operator-linebreak
 			this.newrelic.shim.isArray(callbackFunctions) ||
 				this.newrelic.shim.isFunction(callbackFunctions),
 			'Must specify callbackFunctions as array of strings or as a function',
