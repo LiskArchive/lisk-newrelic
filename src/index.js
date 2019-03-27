@@ -66,7 +66,7 @@ class LiskNewRelic {
 			onError: this.errorHandler,
 		});
 
-		const controllerFolder = '/api/controllers/';
+		const controllerFolder = '/framework/src/modules/http_api/controllers/';
 		const controllerMethodExtractor = (shim, controller) =>
 			// eslint-disable-next-line implicit-arrow-linebreak
 			Object.getOwnPropertyNames(controller).filter(name =>
