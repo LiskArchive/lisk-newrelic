@@ -66,7 +66,7 @@ class LiskNewRelic {
 			onError: this.errorHandler,
 		});
 
-		const controllerFolder = '/api/controllers/';
+		const controllerFolder = '/framework/src/modules/http_api/controllers/';
 		const controllerMethodExtractor = (shim, controller) =>
 			Object.getOwnPropertyNames(controller).filter(name =>
 				shim.isFunction(controller[name]),
