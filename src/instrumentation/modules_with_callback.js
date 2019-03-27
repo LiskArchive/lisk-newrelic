@@ -52,6 +52,7 @@ module.exports = function initialize(
 			);
 		}
 
+		// eslint-disable-next-line no-unused-expressions
 		Object.hasOwnProperty.call(module, methodToWrap[0])
 			? (object = module)
 			: (object = module.prototype);
