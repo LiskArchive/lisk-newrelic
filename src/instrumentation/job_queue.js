@@ -14,6 +14,7 @@
  *
  */
 
+const util = require('util');
 const debug = require('debug')('newrelic:lisk:job_queue');
 
 module.exports = function initialize(shim, jobQueue, moduleName) {
@@ -35,6 +36,20 @@ module.exports = function initialize(shim, jobQueue, moduleName) {
 		}
 
 		return function wrappedRegister(name, originalJob, time) {
+			debug(
+				`wrapping job: ${name}, time: ${
+					time
+				}, isAsync: ${util.types.isAsyncFunction(originalJob)}`,
+			);
+
+			async function wrappedAsyncJob() {
+				return newrelic.startBackgroundTransaction(
+					name,
+					'jobQueue',
+					originalJob,
+				);
+			}
+
 			function wrappedJob(cb) {
 				newrelic.startBackgroundTransaction(name, 'jobQueue', () => {
 					const transaction = newrelic.getTransaction();
@@ -45,7 +60,12 @@ module.exports = function initialize(shim, jobQueue, moduleName) {
 				});
 			}
 
-			originalRegister.call(this, name, wrappedJob, time);
+			originalRegister.call(
+				this,
+				name,
+				util.types.isAsyncFunction(originalJob) ? wrappedAsyncJob : wrappedJob,
+				time,
+			);
 		};
 	});
 };
